@@ -1,4 +1,4 @@
-import pytest, time, os
+import pytest
 from vectorwrap import VectorDB
 
 PG_URL = "postgresql://postgres:secret@localhost/postgres"
