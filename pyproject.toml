@@ -1,0 +1,18 @@
+[project]
+name = "vectorwrap"
+version = "0.2.0"
+description = "One API for vector search across Postgres (pgvector) and MySQL HeatWave"
+authors = [{name = "<YOU>", email = "you@example.com"}]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.11"
+
+dependencies = [
+  "psycopg[binary]>=3.1",
+  "mysql-connector-python>=8.3",
+  "numpy>=1.26"
+]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
