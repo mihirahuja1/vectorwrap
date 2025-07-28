@@ -11,8 +11,13 @@ db.upsert("products", 1, embed("iPhone 15 Pro"), {"category":"phone"})
 hits = db.query("products", embed("latest iPhone"), filter={"category":"phone"})
 ```
 
-Backends: PostgreSQL + pgvector, MySQL 8.2 / HeatWave Vector Store
+**Backends:**
+- **PostgreSQL + pgvector**: Native vector operations with HNSW indexing
+- **MySQL 8.0+**: JSON-based vectors with Python distance calculation
+- **MySQL HeatWave 8.2+**: Native VECTOR type support (future)
 
-Supports metadata filtering (filter={"col":"val"})
-
-Same code → different DB by swapping the connection string.
+**Features:**
+- Unified API across different vector databases
+- Euclidean distance search
+- Metadata filtering support (filter={"col":"val"})
+- Same code → different DB by swapping the connection string

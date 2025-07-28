@@ -1,6 +1,10 @@
 import urllib.parse as up, mysql.connector, numpy as np
+import json
 
-def _lit(v): return "[" + ",".join(map(str, np.asarray(v, dtype=float))) + "]"
+def _euclidean_distance(v1, v2):
+    """Calculate Euclidean distance between two vectors"""
+    v1, v2 = np.asarray(v1, dtype=float), np.asarray(v2, dtype=float)
+    return float(np.sqrt(np.sum((v1 - v2) ** 2)))
 
 def _where(flt: dict[str,str]):
     if not flt:
@@ -25,25 +29,40 @@ class MySQLBackend:
         cur = self.conn.cursor()
         cur.execute(
             f"CREATE TABLE IF NOT EXISTS {name}("
-            f"id BIGINT PRIMARY KEY, emb VECTOR({dim}));"
+            f"id BIGINT PRIMARY KEY, "
+            f"emb JSON NOT NULL, "
+            f"INDEX(id));"
         )
         cur.close()
 
     def upsert(self, name, _id, emb, meta=None):
         cur = self.conn.cursor()
+        emb_json = json.dumps(list(np.asarray(emb, dtype=float)))
         cur.execute(
             f"REPLACE INTO {name}(id, emb) VALUES (%s, %s)",
-            (_id, _lit(emb))
+            (_id, emb_json)
         )
         cur.close()
 
     def query(self, name, emb, top_k=5, filter=None, **_):
         where_sql, vals = _where(filter or {})
-        sql = (f"SELECT id, "
-               f"DISTANCE(emb, STRING_TO_VECTOR(%s), 'EUCLIDEAN') AS dist "
-               f"FROM {name}{where_sql} ORDER BY dist LIMIT %s")
+        
+        # Fetch all vectors and calculate distances in Python
+        # For large datasets, this should be optimized with proper indexing
         cur = self.conn.cursor()
-        cur.execute(sql, [_lit(emb)] + vals + [top_k])
+        cur.execute(f"SELECT id, emb FROM {name}{where_sql}", vals)
         rows = cur.fetchall()
         cur.close()
-        return rows
+        
+        # Calculate distances and sort
+        query_vec = np.asarray(emb, dtype=float)
+        results = []
+        
+        for row_id, emb_json in rows:
+            stored_vec = json.loads(emb_json)
+            distance = _euclidean_distance(query_vec, stored_vec)
+            results.append((row_id, distance))
+        
+        # Sort by distance and return top_k
+        results.sort(key=lambda x: x[1])
+        return results[:top_k]

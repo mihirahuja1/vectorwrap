@@ -1,11 +1,11 @@
 [project]
 name = "vectorwrap"
-version = "0.2.0"
+version = "0.2.0a1"
 description = "One API for vector search across Postgres (pgvector) and MySQL HeatWave"
 authors = [{name = "<YOU>", email = "you@example.com"}]
 license = {text = "MIT"}
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 
 dependencies = [
   "psycopg[binary]>=3.1",
