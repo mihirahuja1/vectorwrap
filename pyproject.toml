@@ -1,6 +1,6 @@
 [project]
 name = "vectorwrap"
-version = "0.2.0a1"
+version = "0.2.0a2"          # bump the patch/alpha tag
 description = "One API for vector search across Postgres (pgvector) and MySQL HeatWave"
 authors = [{name = "<YOU>", email = "you@example.com"}]
 license = {text = "MIT"}
