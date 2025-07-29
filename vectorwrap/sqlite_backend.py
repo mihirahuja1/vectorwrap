@@ -1,20 +1,24 @@
 # vectorwrap/sqlite_backend.py
+from __future__ import annotations
+
+from typing import Any
 try:
-    import pysqlite3 as sqlite3
+    import pysqlite3 as sqlite3  # type: ignore
 except ImportError:
     import sqlite3
 
 import numpy as np
 
 
-def _lit(v):
+def _lit(v: list[float]) -> str:
+    """Convert vector to SQLite-VSS array literal format."""
     return "[" + ",".join(map(str, np.asarray(v, dtype=float))) + "]"
 
 
 class SQLiteBackend:
     """Backend for local prototype databases using sqlite-vss (HNSW)."""
 
-    def __init__(self, url: str):
+    def __init__(self, url: str) -> None:
         # url pattern: sqlite:///absolute/path.db  or  sqlite:///:memory:
         path = url.replace("sqlite:///", "", 1)
         self.conn = sqlite3.connect(path, check_same_thread=False)
@@ -39,7 +43,8 @@ class SQLiteBackend:
                 "Install with: pip install 'vectorwrap[sqlite]'"
             )
 
-    def create_collection(self, name: str, dim: int):
+    def create_collection(self, name: str, dim: int) -> None:
+        """Create a new collection with VSS virtual table."""
         cur = self.conn.cursor()
         cur.execute(
             f"CREATE VIRTUAL TABLE IF NOT EXISTS {name} "
@@ -47,14 +52,22 @@ class SQLiteBackend:
         )
         cur.close()
 
-    def upsert(self, name, _id, emb, meta=None):
+    def upsert(self, name: str, _id: int, emb: list[float], meta: dict[str, Any] | None = None) -> None:
+        """Insert or update a vector with optional metadata."""
         cur = self.conn.cursor()
         # sqlite-vss stores rowid internally
         cur.execute(f"REPLACE INTO {name}(rowid, emb) VALUES (?, ?);", (_id, _lit(emb)))
         cur.close()
         self.conn.commit()
 
-    def query(self, name, emb, top_k=5, filter=None, **_):
+    def query(
+        self, 
+        name: str, 
+        emb: list[float], 
+        top_k: int = 5, 
+        filter: dict[str, Any] | None = None, 
+        **_: Any
+    ) -> list[tuple[int, float]]:
         if filter:
             raise NotImplementedError("SQLite backend does not support filters yet")
         cur = self.conn.cursor()

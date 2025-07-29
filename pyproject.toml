@@ -1,14 +1,12 @@
 [project]
 name = "vectorwrap"
-version = "0.3.0a2"          # bump the patch/alpha tag
-description = "One API for vector search across Postgres (pgvector), MySQL HeatWave, and SQLite"
+version = "0.3.1a1"          # bump the patch/alpha tag
+description = "Universal vector search wrapper for Postgres, MySQL, SQLite, DuckDB (pgvector, HeatWave, sqlite-vss, DuckDB VSS)"
 authors = [{name = "Mihir Ahuja", email = "mihir@example.com"}]
 license = {text = "MIT"}
 readme = "README.md"
 requires-python = ">=3.10"
-homepage = "https://github.com/mihirahuja/vectorwrap"
-repository = "https://github.com/mihirahuja/vectorwrap"
-keywords = ["vector", "database", "embeddings", "similarity", "search", "postgresql", "mysql", "sqlite"]
+keywords = ["vector", "database", "embeddings", "similarity", "search", "postgresql", "mysql", "sqlite", "duckdb"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -20,15 +18,21 @@ classifiers = [
     "Topic :: Database",
     "Topic :: Scientific/Engineering :: Artificial Intelligence"
 ]
-
 dependencies = [
   "psycopg[binary]>=3.1",
   "mysql-connector-python>=8.3",
-  "numpy>=1.26"
+  "numpy>=1.26",
+  "typing-extensions>=4.5.0"
 ]
+
+[project.urls]
+Homepage = "https://github.com/mihirahuja/vectorwrap"
+Repository = "https://github.com/mihirahuja/vectorwrap"
+Issues = "https://github.com/mihirahuja/vectorwrap/issues"
 
 [project.optional-dependencies]
 sqlite = ["pysqlite3>=0.5.0", "sqlite-vss>=0.1.2"]
+duckdb = ["duckdb>=0.10.2"]
 
 
 [build-system]

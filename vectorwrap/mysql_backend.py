@@ -1,12 +1,20 @@
-import urllib.parse as up, mysql.connector, numpy as np
+from __future__ import annotations
+
+from typing import Any
+import urllib.parse as up
+import mysql.connector
+import numpy as np
 import json
 
-def _euclidean_distance(v1, v2):
-    """Calculate Euclidean distance between two vectors"""
+
+def _euclidean_distance(v1: list[float] | np.ndarray, v2: list[float] | np.ndarray) -> float:
+    """Calculate Euclidean distance between two vectors."""
     v1, v2 = np.asarray(v1, dtype=float), np.asarray(v2, dtype=float)
     return float(np.sqrt(np.sum((v1 - v2) ** 2)))
 
-def _where(flt: dict[str,str]):
+
+def _where(flt: dict[str, Any]) -> tuple[str, list[Any]]:
+    """Build WHERE clause from filter dictionary."""
     if not flt:
         return "", []
     clauses, vals = [], []
@@ -15,8 +23,12 @@ def _where(flt: dict[str,str]):
         vals.append(val)
     return " WHERE " + " AND ".join(clauses), vals
 
+
 class MySQLBackend:
-    def __init__(self, url: str):
+    """Backend for MySQL with JSON-based vector storage."""
+
+    def __init__(self, url: str) -> None:
+        """Initialize MySQL connection."""
         p = up.urlparse(url)
         self.db = p.path.lstrip("/")
         self.conn = mysql.connector.connect(
@@ -25,7 +37,8 @@ class MySQLBackend:
             database=self.db, autocommit=True
         )
 
-    def create_collection(self, name: str, dim: int):
+    def create_collection(self, name: str, dim: int) -> None:
+        """Create a new collection with JSON vector storage."""
         cur = self.conn.cursor()
         cur.execute(
             f"CREATE TABLE IF NOT EXISTS {name}("
@@ -35,7 +48,8 @@ class MySQLBackend:
         )
         cur.close()
 
-    def upsert(self, name, _id, emb, meta=None):
+    def upsert(self, name: str, _id: int, emb: list[float], meta: dict[str, Any] | None = None) -> None:
+        """Insert or update a vector with optional metadata."""
         cur = self.conn.cursor()
         emb_json = json.dumps(list(np.asarray(emb, dtype=float)))
         cur.execute(
@@ -44,7 +58,15 @@ class MySQLBackend:
         )
         cur.close()
 
-    def query(self, name, emb, top_k=5, filter=None, **_):
+    def query(
+        self, 
+        name: str, 
+        emb: list[float], 
+        top_k: int = 5, 
+        filter: dict[str, Any] | None = None, 
+        **_: Any
+    ) -> list[tuple[int, float]]:
+        """Query for similar vectors using Python-based distance calculation."""
         where_sql, vals = _where(filter or {})
         
         # Fetch all vectors and calculate distances in Python
@@ -59,9 +81,9 @@ class MySQLBackend:
         results = []
         
         for row_id, emb_json in rows:
-            stored_vec = json.loads(emb_json)
+            stored_vec = json.loads(str(emb_json))  # Ensure emb_json is a string
             distance = _euclidean_distance(query_vec, stored_vec)
-            results.append((row_id, distance))
+            results.append((int(str(row_id)), distance))  # Ensure row_id is int
         
         # Sort by distance and return top_k
         results.sort(key=lambda x: x[1])
