@@ -166,8 +166,8 @@ Coming soon:
 
 ## 📝 License
 
-MIT © 2025
+MIT © 2025 Mihir Ahuja
 
 ---
 
-**[Documentation](https://your-user.github.io/vectorwrap/) • [PyPI](https://pypi.org/project/vectorwrap/) • [Issues](https://github.com/your-user/vectorwrap/issues)**
+**[PyPI Package](https://pypi.org/project/vectorwrap/) • [GitHub Repository](https://github.com/mihirahuja/vectorwrap) • [Report Issues](https://github.com/mihirahuja/vectorwrap/issues)**

@@ -2,10 +2,24 @@
 name = "vectorwrap"
 version = "0.3.0a2"          # bump the patch/alpha tag
 description = "One API for vector search across Postgres (pgvector), MySQL HeatWave, and SQLite"
-authors = [{name = "<YOU>", email = "you@example.com"}]
+authors = [{name = "Mihir Ahuja", email = "mihir@example.com"}]
 license = {text = "MIT"}
 readme = "README.md"
 requires-python = ">=3.10"
+homepage = "https://github.com/mihirahuja/vectorwrap"
+repository = "https://github.com/mihirahuja/vectorwrap"
+keywords = ["vector", "database", "embeddings", "similarity", "search", "postgresql", "mysql", "sqlite"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Database",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence"
+]
 
 dependencies = [
   "psycopg[binary]>=3.1",
