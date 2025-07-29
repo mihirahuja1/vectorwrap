@@ -1,7 +1,7 @@
 [project]
 name = "vectorwrap"
-version = "0.2.0a2"          # bump the patch/alpha tag
-description = "One API for vector search across Postgres (pgvector) and MySQL HeatWave"
+version = "0.3.0a2"          # bump the patch/alpha tag
+description = "One API for vector search across Postgres (pgvector), MySQL HeatWave, and SQLite"
 authors = [{name = "<YOU>", email = "you@example.com"}]
 license = {text = "MIT"}
 readme = "README.md"
@@ -12,6 +12,10 @@ dependencies = [
   "mysql-connector-python>=8.3",
   "numpy>=1.26"
 ]
+
+[project.optional-dependencies]
+sqlite = ["pysqlite3>=0.5.0", "sqlite-vss>=0.1.2"]
+
 
 [build-system]
 requires = ["setuptools>=68", "wheel"]
