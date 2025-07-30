@@ -24,11 +24,13 @@ jobs:
           POSTGRES_PASSWORD: secret
         options: --health-cmd="pg_isready -U postgres" --health-interval=5s --health-retries=5
       mysql:
-        image: mysql/mysql-server:8.2          # drop “-oracle”
+        image: ghcr.io/oracle/mysql-server:8.2
         ports: ["3306:3306"]
         env:
           MYSQL_ROOT_PASSWORD: secret
-        options: --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -psecret" --health-interval=5s --health-retries=12
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -psecret"
+          --health-interval=5s --health-retries=12
 
 
     steps:
