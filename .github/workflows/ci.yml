@@ -1,0 +1,89 @@
+name: test
+
+on: [push, pull_request]
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    
+    # Define the matrix
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+        backend: ["postgres", "sqlite", "duckdb"]
+    
+    env:
+      PG_URL: postgresql://postgres:secret@localhost/postgres
+      MY_URL: mysql://root:secret@localhost:3306/vectordb
+    
+    # Spin up DB containers
+    services:
+      postgres:
+        image: ankane/pgvector:latest
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: postgres
+        options: --health-cmd="pg_isready -U postgres" --health-interval=5s --health-retries=5
+      
+      mysql:
+        image: mysql:8.0
+        ports: ["3306:3306"]
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: vectordb
+        options: --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -psecret" --health-interval=5s --health-retries=12
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      # Install vectorwrap with backend-specific dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Install base package
+          python -m pip install -e .
+          # Install pytest for testing
+          python -m pip install pytest
+          # Install backend-specific extras
+          if [ "${{ matrix.backend }}" = "sqlite" ]; then
+            python -m pip install -e ".[sqlite]"
+          elif [ "${{ matrix.backend }}" = "duckdb" ]; then
+            python -m pip install -e ".[duckdb]"
+          fi
+      
+      # Set up databases
+      - name: Set up PostgreSQL
+        run: |
+          export PGPASSWORD=secret
+          psql -h localhost -U postgres -c "CREATE EXTENSION IF NOT EXISTS vector;"
+        if: always()
+      
+      - name: Set up MySQL
+        run: |
+          mysql -h 127.0.0.1 -u root -psecret vectordb -e "SELECT 1;"
+        if: always()
+      
+      # Debug step (optional - remove after CI is working)
+      - name: Debug installed packages
+        run: |
+          pip list | grep -E "(pytest|vectorwrap|psycopg|mysql|sqlite|duckdb)" || echo "No matching packages found"
+          which pytest
+          echo "Matrix backend: ${{ matrix.backend }}"
+      
+      # Run tests
+      - name: Run tests
+        run: |
+          # Run tests based on the backend
+          if [ "${{ matrix.backend }}" = "sqlite" ]; then
+            pytest tests/test_sqlite.py -v
+          elif [ "${{ matrix.backend }}" = "duckdb" ]; then
+            pytest tests/test_duckdb.py -v  
+          elif [ "${{ matrix.backend }}" = "postgres" ]; then
+            pytest tests/test_wrap.py tests/test_postgres.py -v
+          fi
