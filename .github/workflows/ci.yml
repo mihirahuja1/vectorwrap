@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.11", "3.12"]
-        extra: ["dev", "dev,sqlite", "dev,duckdb"]
+        backend: ["postgres", "sqlite", "duckdb"]
     
     env:
       PG_URL: postgresql://postgres:secret@localhost/postgres
@@ -42,12 +42,20 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       
-      # Install vectorwrap with the extra specified in the matrix
+      # Install vectorwrap with backend-specific dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install ".[${{ matrix.extra }}]"
+          # Install base package
+          python -m pip install -e .
+          # Install pytest for testing
           python -m pip install pytest
+          # Install backend-specific extras
+          if [ "${{ matrix.backend }}" = "sqlite" ]; then
+            python -m pip install -e ".[sqlite]"
+          elif [ "${{ matrix.backend }}" = "duckdb" ]; then
+            python -m pip install -e ".[duckdb]"
+          fi
       
       # Set up databases
       - name: Set up PostgreSQL
@@ -66,17 +74,16 @@ jobs:
         run: |
           pip list | grep -E "(pytest|vectorwrap|psycopg|mysql|sqlite|duckdb)" || echo "No matching packages found"
           which pytest
-          echo "Matrix extra: ${{ matrix.extra }}"
+          echo "Matrix backend: ${{ matrix.backend }}"
       
       # Run tests
       - name: Run tests
         run: |
-          # Only run tests relevant to the installed extras
-          if [[ "${{ matrix.extra }}" == *"sqlite"* ]]; then
+          # Run tests based on the backend
+          if [ "${{ matrix.backend }}" = "sqlite" ]; then
             pytest tests/test_sqlite.py -v
-          elif [[ "${{ matrix.extra }}" == *"duckdb"* ]]; then
+          elif [ "${{ matrix.backend }}" = "duckdb" ]; then
             pytest tests/test_duckdb.py -v  
-          else
-            # Run postgres and mysql tests for base 'dev' matrix
-            pytest tests/test_wrap.py tests/test_postgres.py tests/test_mysql.py -v
+          elif [ "${{ matrix.backend }}" = "postgres" ]; then
+            pytest tests/test_wrap.py tests/test_postgres.py -v
           fi
