@@ -3,14 +3,13 @@ name = "vectorwrap"
 version = "0.3.1a1"          # bump the patch/alpha tag
 description = "Universal vector search wrapper for Postgres, MySQL, SQLite, DuckDB (pgvector, HeatWave, sqlite-vss, DuckDB VSS)"
 authors = [{name = "Mihir Ahuja", email = "mihir@example.com"}]
-license = {text = "MIT"}
+license = "MIT"
 readme = "README.md"
 requires-python = ">=3.10"
 keywords = ["vector", "database", "embeddings", "similarity", "search", "postgresql", "mysql", "sqlite", "duckdb"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -48,6 +47,11 @@ test = ["vectorwrap[dev,sqlite,duckdb]"]
 [build-system]
 requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["vectorwrap*"]
+exclude = ["bench*", "tests*", "docs*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
