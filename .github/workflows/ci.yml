@@ -56,10 +56,15 @@ jobs:
           
           # Install backend-specific extras separately
           if [ "${{ matrix.backend }}" = "sqlite" ]; then
+            echo "Installing SQLite dependencies..."
             python -m pip install "pysqlite3>=0.5.0" "sqlite-vss>=0.1.2"
           elif [ "${{ matrix.backend }}" = "duckdb" ]; then
+            echo "Installing DuckDB dependencies..."
             python -m pip install "duckdb>=0.10.2"
           fi
+          
+          echo "Final package list:"
+          pip list | grep -E "(vectorwrap|psycopg|mysql|sqlite|duckdb|pytest)"
       
       # Set up databases
       - name: Set up PostgreSQL
@@ -83,18 +88,15 @@ jobs:
       # Run tests
       - name: Run tests
         run: |
-          # First, let's see what test files actually exist
-          echo "Available test files:"
-          find . -name "test_*.py" -type f 2>/dev/null || echo "No test_*.py files found"
-          ls -la tests/ 2>/dev/null || echo "No tests directory found"
-          
-          # Run all available tests - let pytest discover them
-          if [ -d "tests" ]; then
-            pytest tests/ -v
-          elif [ -f "test_*.py" ]; then
-            pytest test_*.py -v
-          else
-            echo "No tests found - creating placeholder test"
-            echo "def test_placeholder(): assert True" > test_placeholder.py
-            pytest test_placeholder.py -v
+          # Run tests specific to the backend being tested
+          if [ "${{ matrix.backend }}" = "postgres" ]; then
+            echo "Running Postgres tests..."
+            pytest tests/test_postgres.py -v
+            pytest tests/test_wrap.py -v -k "postgres"
+          elif [ "${{ matrix.backend }}" = "sqlite" ]; then
+            echo "Running SQLite tests..."
+            pytest tests/test_sqlite.py -v
+          elif [ "${{ matrix.backend }}" = "duckdb" ]; then
+            echo "Running DuckDB tests..."
+            pytest tests/test_duckdb.py -v
           fi
