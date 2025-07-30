@@ -68,7 +68,7 @@ class PgBackend:
         where_sql, vals = _where(filter or {})
         with self.conn.cursor() as cur:
             cur.execute(
-                sql.SQL("SELECT id, emb <=> %s::vector AS dist FROM {}{} "
+                sql.SQL("SELECT id, emb <-> %s::vector AS dist FROM {}{} "
                         "ORDER BY dist LIMIT %s")
                     .format(sql.Identifier(name), where_sql),
                 [_lit(emb)] + vals + [top_k]
