@@ -7,20 +7,21 @@ import numpy as np
 import json
 
 
-def _euclidean_distance(v1: list[float] | np.ndarray, v2: list[float] | np.ndarray) -> float:
+def _euclidean_distance(v1: list[float] | np.ndarray[Any, np.dtype[np.floating[Any]]], v2: list[float] | np.ndarray[Any, np.dtype[np.floating[Any]]]) -> float:
     """Calculate Euclidean distance between two vectors."""
     v1, v2 = np.asarray(v1, dtype=float), np.asarray(v2, dtype=float)
     return float(np.sqrt(np.sum((v1 - v2) ** 2)))
 
 
 def _where(flt: dict[str, Any]) -> tuple[str, list[Any]]:
-    """Build WHERE clause from filter dictionary."""
+    """Build WHERE clause from filter dictionary using JSON operators."""
     if not flt:
         return "", []
     clauses, vals = [], []
-    for col, val in flt.items():
-        clauses.append(f"{col} = %s")
-        vals.append(val)
+    for key, val in flt.items():
+        # Use JSON_UNQUOTE and JSON_EXTRACT for filtering
+        clauses.append("JSON_UNQUOTE(JSON_EXTRACT(metadata, %s)) = %s")
+        vals.extend([f"$.{key}", str(val)])  # JSON path and string value
     return " WHERE " + " AND ".join(clauses), vals
 
 
@@ -38,23 +39,33 @@ class MySQLBackend:
         )
 
     def create_collection(self, name: str, dim: int) -> None:
-        """Create a new collection with JSON vector storage."""
+        """Create a new collection with JSON vector storage and metadata."""
         cur = self.conn.cursor()
+        # Create table with basic structure first
         cur.execute(
             f"CREATE TABLE IF NOT EXISTS {name}("
             f"id BIGINT PRIMARY KEY, "
             f"emb JSON NOT NULL, "
             f"INDEX(id));"
         )
+        
+        # Add metadata column if it doesn't exist (for backward compatibility)
+        try:
+            cur.execute(f"ALTER TABLE {name} ADD COLUMN metadata JSON;")
+        except Exception:
+            # Column already exists or other error - ignore
+            pass
+        
         cur.close()
 
     def upsert(self, name: str, _id: int, emb: list[float], meta: dict[str, Any] | None = None) -> None:
         """Insert or update a vector with optional metadata."""
         cur = self.conn.cursor()
         emb_json = json.dumps(list(np.asarray(emb, dtype=float)))
+        metadata_json = json.dumps(meta) if meta is not None else None
         cur.execute(
-            f"REPLACE INTO {name}(id, emb) VALUES (%s, %s)",
-            (_id, emb_json)
+            f"REPLACE INTO {name}(id, emb, metadata) VALUES (%s, %s, %s)",
+            (_id, emb_json, metadata_json)
         )
         cur.close()
 
