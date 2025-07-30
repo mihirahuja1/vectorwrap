@@ -1,0 +1,47 @@
+name: test
+
+on: [push, pull_request]
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+
+    # ➊ define the matrix
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+        extra: ["", "[sqlite]", "[duckdb]"]
+
+    env:
+      PG_URL: postgresql://postgres:secret@localhost/postgres
+      MY_URL: mysql://root:secret@localhost:3306/vectordb
+
+    services:                       # ➋ spin up DB containers
+      postgres:
+        image: ankane/pgvector:latest
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: secret
+        options: --health-cmd="pg_isready -U postgres" --health-interval=5s --health-retries=5
+      mysql:
+        image: mysql/mysql-server:8.2-oracle
+        ports: ["3306:3306"]
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+        options: --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -psecret" --health-interval=5s --health-retries=12
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # ➌ install vectorwrap with the extra specified in the matrix
+      - run: |
+          python -m pip install --upgrade pip
+          python -m pip install ".[dev]${{ matrix.extra }}"
+
+      # ➍ run tests
+      - run: pytest -q
