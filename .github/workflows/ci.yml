@@ -23,6 +23,7 @@ jobs:
         ports: ["5432:5432"]
         env:
           POSTGRES_PASSWORD: secret
+          POSTGRES_DB: postgres
         options: --health-cmd="pg_isready -U postgres" --health-interval=5s --health-retries=5
       
       mysql:
@@ -48,12 +49,34 @@ jobs:
           python -m pip install ".[${{ matrix.extra }}]"
           python -m pip install pytest
       
+      # Set up databases
+      - name: Set up PostgreSQL
+        run: |
+          export PGPASSWORD=secret
+          psql -h localhost -U postgres -c "CREATE EXTENSION IF NOT EXISTS vector;"
+        if: always()
+      
+      - name: Set up MySQL
+        run: |
+          mysql -h 127.0.0.1 -u root -psecret vectordb -e "SELECT 1;"
+        if: always()
+      
       # Debug step (optional - remove after CI is working)
       - name: Debug installed packages
         run: |
-          pip list | grep -E "(pytest|vectorwrap|psycopg|mysql|sqlite|duckdb)"
+          pip list | grep -E "(pytest|vectorwrap|psycopg|mysql|sqlite|duckdb)" || echo "No matching packages found"
           which pytest
+          echo "Matrix extra: ${{ matrix.extra }}"
       
       # Run tests
       - name: Run tests
-        run: pytest -q
+        run: |
+          # Only run tests relevant to the installed extras
+          if [[ "${{ matrix.extra }}" == *"sqlite"* ]]; then
+            pytest tests/test_sqlite.py -v
+          elif [[ "${{ matrix.extra }}" == *"duckdb"* ]]; then
+            pytest tests/test_duckdb.py -v  
+          else
+            # Run postgres and mysql tests for base 'dev' matrix
+            pytest tests/test_wrap.py tests/test_postgres.py tests/test_mysql.py -v
+          fi
