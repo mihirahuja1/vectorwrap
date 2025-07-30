@@ -1,4 +1,6 @@
-# vectorwrap 0.3.1a3 [![PyPI version](https://img.shields.io/pypi/v/vectorwrap)](https://pypi.org/project/vectorwrap/)
+# vectorwrap 0.4.0a1 
+
+[![PyPI version](https://img.shields.io/pypi/v/vectorwrap)](https://pypi.org/project/vectorwrap/) [![codecov](https://codecov.io/gh/mihirahuja/vectorwrap/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mihirahuja/vectorwrap) [![CI](https://github.com/mihirahuja/vectorwrap/workflows/test/badge.svg)](https://github.com/mihirahuja/vectorwrap/actions)
 
 Universal vector search wrapper for Postgres, MySQL, SQLite, DuckDB (pgvector, HeatWave, sqlite-vss, DuckDB VSS).
 
@@ -17,6 +19,9 @@ pip install "vectorwrap[sqlite]"
 
 # Add DuckDB support (includes VSS extension)
 pip install "vectorwrap[duckdb]"
+
+# Install all backends for development
+pip install "vectorwrap[sqlite,duckdb]"
 ```
 
 ```python
@@ -53,7 +58,7 @@ print(results)  # → [(1, 0.023), (2, 0.087)]
 | **MySQL 8.2+ HeatWave** | `VECTOR(n)` | Automatic | Built-in | Native vector support |
 | **MySQL ≤8.0 (legacy)** | JSON arrays | None | Built-in | Slower, Python distance |
 | **SQLite + sqlite-vss** | Virtual table | HNSW | `pip install "vectorwrap[sqlite]"` | Great for prototyping |
-| **DuckDB + VSS** | `FLOAT[]` arrays | HNSW | `pip install "vectorwrap[duckdb]"` | Analytics + vectors |
+| **DuckDB + VSS** ✅ | `FLOAT[]` arrays | HNSW | `pip install "vectorwrap[duckdb]"` | Analytics + vectors |
 
 ## Examples
 
@@ -155,7 +160,7 @@ Find the `top_k` most similar vectors. Returns list of `(id, distance)` tuples.
 - **Minor versions** (0.3.x → 0.4.0): New features, deprecated APIs get warnings
 - **Major versions** (0.x → 1.0): Breaking changes allowed, migration guide provided
 
-**Current Status**: `v0.3.1a1` - Alpha release, API stabilizing for v1.0
+**Current Status**: `v0.4.0a1` - Alpha release, API stabilizing for v1.0
 
 ## Installation Notes
 

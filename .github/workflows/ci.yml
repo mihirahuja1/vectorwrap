@@ -58,8 +58,8 @@ jobs:
           # Install base package first
           python -m pip install -e .
           
-          # Install pytest for testing
-          python -m pip install pytest
+          # Install pytest and coverage for testing
+          python -m pip install pytest pytest-cov coverage[toml]
           
           # Install backend-specific extras separately
           if [ "${{ matrix.backend }}" = "sqlite" ]; then
@@ -92,18 +92,28 @@ jobs:
           which pytest
           echo "Matrix backend: ${{ matrix.backend }}"
       
-      # Run tests
+      # Run tests with coverage
       - name: Run tests
         run: |
-          # Run tests specific to the backend being tested
+          # Run tests specific to the backend being tested with coverage
           if [ "${{ matrix.backend }}" = "postgres" ]; then
             echo "Running Postgres tests..."
-            pytest tests/test_postgres.py -v
-            pytest tests/test_wrap.py -v -k "postgres"
+            pytest tests/test_postgres.py --cov=vectorwrap --cov-report=xml -v
+            pytest tests/test_wrap.py -k "postgres" --cov=vectorwrap --cov-append --cov-report=xml -v
           elif [ "${{ matrix.backend }}" = "sqlite" ]; then
             echo "Running SQLite tests..."
-            pytest tests/test_sqlite.py -v
+            pytest tests/test_sqlite.py --cov=vectorwrap --cov-report=xml -v
           elif [ "${{ matrix.backend }}" = "duckdb" ]; then
             echo "Running DuckDB tests..."
-            pytest tests/test_duckdb.py -v
+            pytest tests/test_duckdb.py --cov=vectorwrap --cov-report=xml -v
           fi
+      
+      # Upload coverage to Codecov
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          flags: ${{ matrix.backend }}
+          name: codecov-${{ matrix.backend }}-py${{ matrix.python-version }}
+        if: always()
