@@ -1,4 +1,4 @@
-# vectorwrap 0.4.0a1 
+# vectorwrap 0.4.0 
 
 [![PyPI version](https://img.shields.io/pypi/v/vectorwrap)](https://pypi.org/project/vectorwrap/) [![codecov](https://codecov.io/gh/mihirahuja/vectorwrap/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mihirahuja/vectorwrap) [![CI](https://github.com/mihirahuja/vectorwrap/workflows/test/badge.svg)](https://github.com/mihirahuja/vectorwrap/actions)
 
@@ -160,7 +160,7 @@ Find the `top_k` most similar vectors. Returns list of `(id, distance)` tuples.
 - **Minor versions** (0.3.x → 0.4.0): New features, deprecated APIs get warnings
 - **Major versions** (0.x → 1.0): Breaking changes allowed, migration guide provided
 
-**Current Status**: `v0.4.0a1` - Alpha release, API stabilizing for v1.0
+**Current Status**: `v0.4.0` - **Stable release** with API backward compatibility guarantees
 
 ## Installation Notes
 

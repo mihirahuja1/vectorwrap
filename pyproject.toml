@@ -1,6 +1,6 @@
 [project]
 name = "vectorwrap"
-version = "0.4.0a1"
+version = "0.4.0"
 description = "Universal vector search wrapper for Postgres, MySQL, SQLite, DuckDB (pgvector, HeatWave, sqlite-vss, DuckDB VSS)"
 authors = [{name = "Mihir Ahuja", email = "mihir@example.com"}]
 license = "MIT"
