@@ -2,7 +2,7 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/vectorwrap)](https://pypi.org/project/vectorwrap/) [![codecov](https://codecov.io/gh/mihirahuja/vectorwrap/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mihirahuja/vectorwrap) [![CI](https://github.com/mihirahuja/vectorwrap/workflows/test/badge.svg)](https://github.com/mihirahuja/vectorwrap/actions)
 <p align="center">
-  <img src="docs/demo.svg" width="600" alt="SQLite→Postgres swap demo"/>
+  <img src="[docs/demo.svg](https://github.com/mihirahuja1/vectorwrap/blob/main/examples/vectorwrapdemo.gif)" width="600" alt="SQLite→Postgres swap demo"/>
 </p>
 Universal vector search wrapper for Postgres, MySQL, SQLite, DuckDB (pgvector, HeatWave, sqlite-vss, DuckDB VSS).
 
