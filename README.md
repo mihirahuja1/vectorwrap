@@ -3,9 +3,8 @@
 <p align="center">
   <a href="https://pypi.org/project/vectorwrap"><img src="https://img.shields.io/pypi/v/vectorwrap.svg" alt="PyPI"></a>
   <a href="https://github.com/mihirahuja1/vectorwrap/stargazers"><img src="https://img.shields.io/github/stars/mihirahuja1/vectorwrap?style=social" alt="GitHub Stars"></a>
-  <a href="https://github.com/mihirahuja1/vectorwrap/actions/workflows/test.yml"><img src="https://github.com/mihirahuja1/vectorwrap/actions/workflows/test.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/mihirahuja1/vectorwrap/actions/workflows/ci"><img src="https://github.com/mihirahuja1/vectorwrap/actions/workflows/ci/badge.svg" alt="CI"></a>
   <a href="https://codecov.io/gh/mihirahuja1/vectorwrap"><img src="https://codecov.io/gh/mihirahuja1/vectorwrap/branch/main/graph/badge.svg" alt="Coverage"></a>
-  <a href="https://vectorwrap.readthedocs.io"><img src="https://img.shields.io/badge/docs-online-blue" alt="Documentation"></a>
 </p>
 
 <p align="center">
