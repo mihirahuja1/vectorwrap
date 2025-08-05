@@ -1,6 +1,14 @@
 # vectorwrap 0.4.0 
 
-[![PyPI version](https://img.shields.io/pypi/v/vectorwrap)](https://pypi.org/project/vectorwrap/) [![codecov](https://codecov.io/gh/mihirahuja/vectorwrap/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mihirahuja/vectorwrap) [![CI](https://github.com/mihirahuja/vectorwrap/workflows/test/badge.svg)](https://github.com/mihirahuja/vectorwrap/actions)
+<p align="center">
+  <a href="https://pypi.org/project/vectorwrap"><img src="https://img.shields.io/pypi/v/vectorwrap.svg" alt="PyPI"></a>
+  <a href="https://pepy.tech/project/vectorwrap"><img src="https://static.pepy.tech/badge/vectorwrap" alt="Downloads"></a>
+  <a href="https://github.com/mihirahuja1/vectorwrap/stargazers"><img src="https://img.shields.io/github/stars/mihirahuja1/vectorwrap?style=social" alt="GitHub Stars"></a>
+  <a href="https://github.com/mihirahuja1/vectorwrap/actions/workflows/test.yml"><img src="https://github.com/mihirahuja1/vectorwrap/actions/workflows/test.yml/badge.svg" alt="CI"></a>
+  <a href="https://codecov.io/gh/mihirahuja1/vectorwrap"><img src="https://codecov.io/gh/mihirahuja1/vectorwrap/branch/main/graph/badge.svg" alt="Coverage"></a>
+  <a href="https://vectorwrap.readthedocs.io"><img src="https://img.shields.io/badge/docs-online-blue" alt="Documentation"></a>
+</p>
+
 <p align="center">
   <img src="examples/vectorwrapdemo.gif" width="600" alt="SQLite→Postgres swap demo">
 </p>
@@ -12,6 +20,8 @@ Switch between PostgreSQL, MySQL, SQLite, and DuckDB vector backends with a sing
 **Stable API** - Core methods follow semantic versioning with backward compatibility guarantees.
 
 ## Quick Start
+
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mihirahuja1/vectorwrap/blob/HEAD/examples/demo_notebook.ipynb)
 
 ```bash
 # Core install (PostgreSQL + MySQL support)
@@ -229,5 +239,8 @@ db.create_collection("embeddings", dim=1536)  # Auto-creates HNSW index
 MIT © 2025 Mihir Ahuja
 
 ---
+
+### ❤️ Love it?
+If **vectorwrap** saved you time, please **star the repo** – it helps others discover it!
 
 **[PyPI Package](https://pypi.org/project/vectorwrap/) • [GitHub Repository](https://github.com/mihirahuja/vectorwrap) • [Report Issues](https://github.com/mihirahuja/vectorwrap/issues)**
