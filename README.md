@@ -238,11 +238,24 @@ Note: ClickHouse vector similarity indexes require ClickHouse version 25.8+ with
 - **Hybrid deployments**: PostgreSQL for production, DuckDB/ClickHouse for analytics
 - **High-performance**: ClickHouse for large-scale vector search workloads
 
+## Benchmarks
+
+Comprehensive performance benchmarks are available in the [`bench/`](bench/) directory.
+
+**Quick benchmark:**
+```bash
+pip install "vectorwrap[all]" matplotlib
+python bench/benchmark.py
+python bench/visualize.py benchmark_results.json
+```
+
+See [bench/README.md](bench/README.md) for detailed benchmarking guide.
+
 ## Roadmap
 
 ### v1.0 Stable Release
 - **API Freeze**: Lock stable APIs with full backward compatibility
-- **Production Testing**: Comprehensive benchmarks across all backends
+- **Production Testing**: Comprehensive benchmarks across all backends ✅
 - **Documentation**: Complete API docs and migration guides
 
 ### Future Features
