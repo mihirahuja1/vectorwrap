@@ -72,8 +72,8 @@ print(results)  # → [(1, 0.023), (2, 0.087)]
 | **MySQL 8.2+ HeatWave** | `VECTOR(n)` | Automatic | Built-in | Native vector support |
 | **MySQL ≤8.0 (legacy)** | JSON arrays | None | Built-in | Slower, Python distance |
 | **SQLite + sqlite-vss** | Virtual table | HNSW | `pip install "vectorwrap[sqlite]"` | Great for prototyping |
-| **DuckDB + VSS** ✅ | `FLOAT[]` arrays | HNSW | `pip install "vectorwrap[duckdb]"` | Analytics + vectors |
-| **ClickHouse** ✨ | `Array(Float32)` | HNSW | `pip install "vectorwrap[clickhouse]"` | High-performance analytics |
+| **DuckDB + VSS**  | `FLOAT[]` arrays | HNSW | `pip install "vectorwrap[duckdb]"` | Analytics + vectors |
+| **ClickHouse**  | `Array(Float32)` | HNSW | `pip install "vectorwrap[clickhouse]"` | High-performance analytics |
 
 ## Examples
 
@@ -259,7 +259,6 @@ MIT © 2025 Mihir Ahuja
 
 ---
 
-### ❤️ Love it?
 If **vectorwrap** saved you time, please **star the repo** – it helps others discover it!
 
 **[PyPI Package](https://pypi.org/project/vectorwrap/) • [GitHub Repository](https://github.com/mihirahuja/vectorwrap) • [Report Issues](https://github.com/mihirahuja/vectorwrap/issues)**
