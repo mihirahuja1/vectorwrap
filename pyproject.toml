@@ -1,12 +1,12 @@
 [project]
 name = "vectorwrap"
-version = "0.4.0"
-description = "Universal vector search wrapper for Postgres, MySQL, SQLite, DuckDB (pgvector, HeatWave, sqlite-vss, DuckDB VSS)"
+version = "0.5.0"
+description = "Universal vector search wrapper for Postgres, MySQL, SQLite, DuckDB, ClickHouse (pgvector, HeatWave, sqlite-vss, DuckDB VSS, ClickHouse ANN)"
 authors = [{name = "Mihir Ahuja", email = "mihir@example.com"}]
 license = "MIT"
 readme = "README.md"
 requires-python = ">=3.10"
-keywords = ["vector", "database", "embeddings", "similarity", "search", "postgresql", "mysql", "sqlite", "duckdb"]
+keywords = ["vector", "database", "embeddings", "similarity", "search", "postgresql", "mysql", "sqlite", "duckdb", "clickhouse"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -32,6 +32,7 @@ Issues = "https://github.com/mihirahuja/vectorwrap/issues"
 [project.optional-dependencies]
 sqlite = ["pysqlite3>=0.5.0", "sqlite-vss>=0.1.2"]
 duckdb = ["duckdb>=0.10.2"]
+clickhouse = ["clickhouse-connect>=0.6.0"]
 dev = [
     "pytest>=6.0",
     "pytest-cov>=4.0",
@@ -41,8 +42,8 @@ dev = [
     "pre-commit>=3.0"
 ]
 # Convenience extras for different combinations
-all = ["vectorwrap[sqlite,duckdb]"]
-test = ["vectorwrap[dev,sqlite,duckdb]"]
+all = ["vectorwrap[sqlite,duckdb,clickhouse]"]
+test = ["vectorwrap[dev,sqlite,duckdb,clickhouse]"]
 
 [build-system]
 requires = ["setuptools>=68", "wheel"]
@@ -122,6 +123,7 @@ module = [
     "mysql.connector.*",
     "sqlite_vss.*",
     "duckdb.*",
-    "psycopg.*"
+    "psycopg.*",
+    "clickhouse_connect.*"
 ]
 ignore_missing_imports = true

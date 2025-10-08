@@ -1,4 +1,4 @@
-# vectorwrap 0.4.0 
+# vectorwrap 0.5.0
 
 <p align="center">
   <a href="https://pypi.org/project/vectorwrap"><img src="https://img.shields.io/pypi/v/vectorwrap.svg" alt="PyPI"></a>
@@ -11,9 +11,9 @@
   <img src="examples/vectorwrapdemo.gif" width="600" alt="SQLite→Postgres swap demo">
 </p>
 
-Universal vector search wrapper for Postgres, MySQL, SQLite, DuckDB (pgvector, HeatWave, sqlite-vss, DuckDB VSS).
+Universal vector search wrapper for Postgres, MySQL, SQLite, DuckDB, ClickHouse (pgvector, HeatWave, sqlite-vss, DuckDB VSS, ClickHouse ANN).
 
-Switch between PostgreSQL, MySQL, SQLite, and DuckDB vector backends with a single line of code. Perfect for prototyping, testing, and production deployments.
+Switch between PostgreSQL, MySQL, SQLite, DuckDB, and ClickHouse vector backends with a single line of code. Perfect for prototyping, testing, and production deployments.
 
 **Stable API** - Core methods follow semantic versioning with backward compatibility guarantees.
 
@@ -31,8 +31,11 @@ pip install "vectorwrap[sqlite]"
 # Add DuckDB support (includes VSS extension)
 pip install "vectorwrap[duckdb]"
 
+# Add ClickHouse support (includes clickhouse-connect)
+pip install "vectorwrap[clickhouse]"
+
 # Install all backends for development
-pip install "vectorwrap[sqlite,duckdb]"
+pip install "vectorwrap[sqlite,duckdb,clickhouse]"
 ```
 
 ```python
@@ -44,7 +47,7 @@ def embed(text: str) -> list[float]:
     return [0.1, 0.2, ...] 
 
 # Connect to any supported database
-db = VectorDB("postgresql://user:pass@host/db")  # or mysql://... or sqlite:///path.db or duckdb:///path.db
+db = VectorDB("postgresql://user:pass@host/db")  # or mysql://... or sqlite:///path.db or duckdb:///path.db or clickhouse://...
 db.create_collection("products", dim=1536)
 
 # Insert vectors with metadata
@@ -70,6 +73,7 @@ print(results)  # → [(1, 0.023), (2, 0.087)]
 | **MySQL ≤8.0 (legacy)** | JSON arrays | None | Built-in | Slower, Python distance |
 | **SQLite + sqlite-vss** | Virtual table | HNSW | `pip install "vectorwrap[sqlite]"` | Great for prototyping |
 | **DuckDB + VSS** ✅ | `FLOAT[]` arrays | HNSW | `pip install "vectorwrap[duckdb]"` | Analytics + vectors |
+| **ClickHouse** ✨ | `Array(Float32)` | HNSW | `pip install "vectorwrap[clickhouse]"` | High-performance analytics |
 
 ## Examples
 
@@ -126,6 +130,10 @@ db = VectorDB("sqlite:///:memory:")
 # DuckDB (local file or in-memory)
 db = VectorDB("duckdb:///./vectors.db")
 db = VectorDB("duckdb:///:memory:")
+
+# ClickHouse (local or remote)
+db = VectorDB("clickhouse://default@localhost:8123/default")
+db = VectorDB("clickhouse://user:password@host:port/database")
 ```
 
 ## API Reference
@@ -144,8 +152,9 @@ Find the `top_k` most similar vectors. Returns list of `(id, distance)` tuples.
 
 **Filtering Support:**
 - PostgreSQL & MySQL: Native SQL filtering
-- SQLite: Adaptive oversampling (fetches more results, then filters)  
+- SQLite: Adaptive oversampling (fetches more results, then filters)
 - DuckDB: Native JSON filtering with SQL predicates
+- ClickHouse: Native JSON filtering with JSONExtract functions
 
 ## API Stability
 
@@ -208,14 +217,26 @@ db = VectorDB("duckdb:///analytics.db")
 db.create_collection("embeddings", dim=1536)  # Auto-creates HNSW index
 ```
 
+### ClickHouse Setup
+ClickHouse provides native support for vector similarity search using ANN indexes:
+
+```python
+# Works with vectorwrap[clickhouse]
+db = VectorDB("clickhouse://default@localhost:8123/default")
+db.create_collection("embeddings", dim=1536)  # Auto-creates HNSW index
+```
+
+Note: ClickHouse vector similarity indexes require ClickHouse version 25.8+ with the experimental feature enabled. The backend automatically handles this configuration.
+
 ## Use Cases
 
-- **Prototyping**: Start with SQLite or DuckDB, scale to PostgreSQL
-- **Testing**: Use in-memory databases (SQLite/DuckDB) for fast tests  
-- **Analytics**: DuckDB for combining vector search with analytical queries
+- **Prototyping**: Start with SQLite or DuckDB, scale to PostgreSQL or ClickHouse
+- **Testing**: Use in-memory databases (SQLite/DuckDB) for fast tests
+- **Analytics**: DuckDB or ClickHouse for combining vector search with analytical queries
 - **Multi-tenant**: Different customers on different database backends
 - **Migration**: Move vector data between database systems seamlessly
-- **Hybrid deployments**: PostgreSQL for production, DuckDB for analytics
+- **Hybrid deployments**: PostgreSQL for production, DuckDB/ClickHouse for analytics
+- **High-performance**: ClickHouse for large-scale vector search workloads
 
 ## Roadmap
 

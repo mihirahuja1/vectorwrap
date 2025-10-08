@@ -8,6 +8,7 @@ from .pg_backend import PgBackend
 from .mysql_backend import MySQLBackend
 from .sqlite_backend import SQLiteBackend
 from .duckdb_backend import DuckDBBackend
+from .clickhouse_backend import ClickHouseBackend
 
 
 class VectorBackend(Protocol):
@@ -36,14 +37,14 @@ class VectorBackend(Protocol):
 def VectorDB(url: str) -> VectorBackend:
     """
     Create a vector database connection.
-    
+
     Args:
-        url: Database connection string (e.g., "postgresql://...", "mysql://...", 
-             "sqlite:///...", "duckdb:///...")
-    
+        url: Database connection string (e.g., "postgresql://...", "mysql://...",
+             "sqlite:///...", "duckdb:///...", "clickhouse://...")
+
     Returns:
         A vector database backend instance
-        
+
     Raises:
         ValueError: If the URL scheme is not supported
     """
@@ -55,7 +56,9 @@ def VectorDB(url: str) -> VectorBackend:
         return SQLiteBackend(url)
     if url.startswith("duckdb"):
         return DuckDBBackend(url)
-    raise ValueError(f"Unsupported URL scheme. URL must start with postgres, mysql, sqlite, or duckdb, got: {url}")
+    if url.startswith("clickhouse"):
+        return ClickHouseBackend(url)
+    raise ValueError(f"Unsupported URL scheme. URL must start with postgres, mysql, sqlite, duckdb, or clickhouse, got: {url}")
 
 
 __all__ = ["VectorDB", "VectorBackend"]
