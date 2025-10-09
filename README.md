@@ -238,6 +238,42 @@ Note: ClickHouse vector similarity indexes require ClickHouse version 25.8+ with
 - **Hybrid deployments**: PostgreSQL for production, DuckDB/ClickHouse for analytics
 - **High-performance**: ClickHouse for large-scale vector search workloads
 
+## Integrations
+
+vectorwrap integrates with popular AI frameworks and vector databases:
+
+- **LangChain**: Drop-in VectorStore adapter for RAG pipelines
+- **LlamaIndex**: VectorStore wrapper for data frameworks
+- **Supabase**: Managed PostgreSQL + pgvector helper
+- **Milvus**: Enterprise vector database adapter
+- **Qdrant**: Cloud-native vector search integration
+
+```bash
+# Install with integrations
+pip install "vectorwrap[langchain]"
+pip install "vectorwrap[llamaindex]"
+pip install "vectorwrap[milvus]"
+pip install "vectorwrap[qdrant]"
+```
+
+**Example with LangChain:**
+```python
+from langchain.embeddings import OpenAIEmbeddings
+from vectorwrap.integrations.langchain import VectorwrapStore
+
+embeddings = OpenAIEmbeddings()
+vectorstore = VectorwrapStore(
+    connection_url="postgresql://user:pass@localhost/db",
+    collection_name="documents",
+    embedding_function=embeddings
+)
+
+vectorstore.add_texts(["Hello world", "LangChain + vectorwrap"])
+results = vectorstore.similarity_search("greeting", k=5)
+```
+
+See [docs/INTEGRATIONS.md](docs/INTEGRATIONS.md) for complete integration guide.
+
 ## Benchmarks
 
 Comprehensive performance benchmarks are available in the [`bench/`](bench/) directory.

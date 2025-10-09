@@ -33,6 +33,10 @@ Issues = "https://github.com/mihirahuja/vectorwrap/issues"
 sqlite = ["pysqlite3>=0.5.0", "sqlite-vss>=0.1.2"]
 duckdb = ["duckdb>=0.10.2"]
 clickhouse = ["clickhouse-connect>=0.6.0"]
+langchain = ["langchain>=0.1.0"]
+llamaindex = ["llama-index>=0.10.0"]
+milvus = ["pymilvus>=2.3.0"]
+qdrant = ["qdrant-client>=1.7.0"]
 dev = [
     "pytest>=6.0",
     "pytest-cov>=4.0",
@@ -42,7 +46,8 @@ dev = [
     "pre-commit>=3.0"
 ]
 # Convenience extras for different combinations
-all = ["vectorwrap[sqlite,duckdb,clickhouse]"]
+all = ["vectorwrap[sqlite,duckdb,clickhouse,langchain,llamaindex,milvus,qdrant]"]
+integrations = ["vectorwrap[langchain,llamaindex,milvus,qdrant]"]
 test = ["vectorwrap[dev,sqlite,duckdb,clickhouse]"]
 
 [build-system]
@@ -124,6 +129,10 @@ module = [
     "sqlite_vss.*",
     "duckdb.*",
     "psycopg.*",
-    "clickhouse_connect.*"
+    "clickhouse_connect.*",
+    "langchain.*",
+    "llama_index.*",
+    "pymilvus.*",
+    "qdrant_client.*"
 ]
 ignore_missing_imports = true
