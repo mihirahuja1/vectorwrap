@@ -205,19 +205,19 @@ class BenchmarkRunner:
                 print(f"  Filtered queries: {filter_results['error']}")
 
             results["status"] = "success"
-            print(f"\n✅ {backend_name} benchmark completed successfully")
+            print(f"\n[SUCCESS] {backend_name} benchmark completed successfully")
 
         except Exception as e:
             results["status"] = "error"
             results["error"] = str(e)
             results["traceback"] = traceback.format_exc()
-            print(f"\n❌ {backend_name} benchmark failed: {e}")
+            print(f"\n[ERROR] {backend_name} benchmark failed: {e}")
 
         return results
 
     def run_all(self) -> Dict[str, Any]:
         """Run benchmarks for all backends."""
-        print(f"\n🚀 Starting vectorwrap benchmark suite")
+        print(f"\nStarting vectorwrap benchmark suite")
         print(f"Dataset size: {self.dataset_size}")
         print(f"Vector dimensions: {self.dim}")
         print(f"Backends: {', '.join(self.backends.keys())}")
@@ -242,7 +242,7 @@ class BenchmarkRunner:
         """Save benchmark results to JSON file."""
         with open(filename, "w") as f:
             json.dump(self.results, f, indent=2)
-        print(f"\n💾 Results saved to {filename}")
+        print(f"\nResults saved to {filename}")
 
     def print_summary(self) -> None:
         """Print summary comparison table."""
@@ -263,10 +263,10 @@ class BenchmarkRunner:
                 insert_rate = backend_results.get("insert", {}).get("vectors_per_sec", 0)
                 query_rate = backend_results.get("query_top10", {}).get("queries_per_sec", 0)
                 avg_latency = backend_results.get("query_top10", {}).get("avg_time", 0) * 1000
-                status = "✅"
+                status = "OK"
             else:
                 insert_rate = query_rate = avg_latency = 0
-                status = "❌"
+                status = "FAIL"
 
             rows.append(
                 [

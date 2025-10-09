@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.4.0] - 2025-07-30
 
-🎉 **STABLE RELEASE** - Production-ready with API backward compatibility guarantees.
+**STABLE RELEASE** - Production-ready with API backward compatibility guarantees.
 
 ## [0.4.0a1] - 2025-07-30
 

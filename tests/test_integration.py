@@ -306,8 +306,8 @@ def test_edge_cases_consistency():
 
 if __name__ == "__main__":
     # Run basic smoke test
-    print("🧪 Running integration smoke test...")
-    
+    print("Running integration smoke test...")
+
     try:
         # Test SQLite
         db = VectorDB("sqlite:///:memory:")
@@ -315,18 +315,18 @@ if __name__ == "__main__":
         db.upsert("smoke", 1, [1.0, 0.0], {"test": True})
         results = db.query("smoke", [1.0, 0.0], top_k=1)
         assert len(results) == 1
-        print("✅ SQLite smoke test passed")
-        
+        print("SQLite smoke test passed")
+
         # Test DuckDB
         db = VectorDB("duckdb:///:memory:")
         db.create_collection("smoke", 2)
         db.upsert("smoke", 1, [1.0, 0.0], {"test": True})
         results = db.query("smoke", [1.0, 0.0], top_k=1)
-        assert len(results) == 1 
-        print("✅ DuckDB smoke test passed")
-        
-        print("🎉 All smoke tests passed!")
-        
+        assert len(results) == 1
+        print("DuckDB smoke test passed")
+
+        print("All smoke tests passed!")
+
     except Exception as e:
-        print(f"❌ Smoke test failed: {e}")
+        print(f"Smoke test failed: {e}")
         raise

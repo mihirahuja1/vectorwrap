@@ -111,4 +111,4 @@ When adding a new vector database backend:
 - **Start a discussion** for design questions
 - **Check existing issues** before creating new ones
 
-We appreciate your contributions! 🚀
+We appreciate your contributions!

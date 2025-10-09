@@ -214,15 +214,15 @@ def test_memory_stress():
 
 if __name__ == "__main__":
     # Run a quick stress test
-    print("🧪 Running stress tests...")
-    
+    print("Running stress tests...")
+
     test_large_vectors()
-    print("✅ Large vectors test passed")
-    
+    print("Large vectors test passed")
+
     test_extreme_values()
-    print("✅ Extreme values test passed")
-    
+    print("Extreme values test passed")
+
     test_complex_metadata()
-    print("✅ Complex metadata test passed")
-    
-    print("🎉 Basic stress tests completed!")
+    print("Complex metadata test passed")
+
+    print("Basic stress tests completed!")

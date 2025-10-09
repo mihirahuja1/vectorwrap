@@ -12,8 +12,8 @@
 
 | Backend | Insert (vec/s) | Query Top-10 (q/s) | Query Top-100 (q/s) | Avg Latency (ms) | Status |
 |---------|----------------|--------------------|--------------------|------------------|--------|
-| sqlite | 388 | 5424.3 | 4662.3 | 0.18 | ✅ |
-| duckdb | 744 | 551.0 | 737.9 | 1.81 | ✅ |
+| sqlite | 388 | 5424.3 | 4662.3 | 0.18 | OK |
+| duckdb | 744 | 551.0 | 737.9 | 1.81 | OK |
 
 ## Detailed Results
 
@@ -78,24 +78,24 @@
 ## Use Case Recommendations
 
 ### When to Use SQLite
-✅ **Best for:**
+**Best for:**
 - High-volume query workloads
 - Low-latency requirements (<1ms)
 - Simple embedded applications
 - Single-user scenarios
 
-❌ **Not ideal for:**
+**Not ideal for:**
 - Concurrent write-heavy workloads
 - Very large datasets (>100M vectors)
 
 ### When to Use DuckDB
-✅ **Best for:**
+**Best for:**
 - Analytical queries + vector search
 - Better insert performance
 - OLAP workloads with vector similarity
 - Data science notebooks
 
-❌ **Not ideal for:**
+**Not ideal for:**
 - Ultra-low latency requirements
 - Web APIs with strict latency SLAs
 
