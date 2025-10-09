@@ -141,16 +141,14 @@ Lower is better. Measures response time.
 
 ## Sample Results
 
-Example performance on MacBook Pro M1 (10K vectors, 128D):
+See [SAMPLE_RESULTS.md](SAMPLE_RESULTS.md) for detailed benchmark results on representative hardware.
 
-```
-Backend          Insert (vec/s)  Query (q/s)  Avg Latency (ms)  Status
-──────────────────────────────────────────────────────────────────────
-sqlite           2,450           156.3        6.40              ✅
-duckdb           8,320           412.7        2.42              ✅
-postgres         3,120           245.1        4.08              ✅
-clickhouse       12,500          890.5        1.12              ✅
-```
+**Quick Summary (5K vectors, 128D):**
+
+| Backend | Insert (vec/s) | Query (q/s) | Avg Latency (ms) |
+|---------|----------------|-------------|------------------|
+| SQLite  | 388            | 5,424       | 0.18             |
+| DuckDB  | 744            | 551         | 1.81             |
 
 *Your results will vary based on hardware, dataset size, and configuration.*
 

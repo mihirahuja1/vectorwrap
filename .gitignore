@@ -51,4 +51,21 @@ Thumbs.db
 .env.local
 .env.development.local
 .env.test.local
-.env.production.local 
+.env.production.local
+
+# Benchmark data and results (exclude test databases and temporary results)
+bench/*.db
+bench/*.duckdb
+bench/benchmark_results.json
+bench/benchmark_results.png
+bench/benchmark_results.pdf
+bench/BENCHMARK_RESULTS.md
+bench/sample_results.json
+benchmark.db
+benchmark_duckdb.db
+*.db
+*.duckdb
+
+# Test data
+test_*.db
+vectors.db
