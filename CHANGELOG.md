@@ -5,6 +5,75 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2025-01-07
+
+**MAJOR ECOSYSTEM EXPANSION** - Integration support for LangChain, LlamaIndex, Supabase, Milvus, and Qdrant.
+
+### Added
+- **LangChain VectorStore adapter** - Full integration with LangChain's document retrieval and RAG pipelines
+  - `add_texts()`, `similarity_search()`, `similarity_search_with_score()`, `as_retriever()`
+  - Works seamlessly with any vectorwrap backend
+  - Example: `examples/langchain_example.py`
+- **LlamaIndex VectorStore wrapper** - Complete integration with LlamaIndex data framework
+  - VectorStore protocol implementation with node support
+  - Convenience `create_vector_store()` helper function
+  - Compatible with ServiceContext and query engines
+- **Supabase pgvector helper** - Managed PostgreSQL + pgvector integration
+  - `from_supabase_credentials()` and `from_env()` convenience methods
+  - Row Level Security (RLS) support with policy creation
+  - Bulk upsert operations for performance
+  - Schema helpers and SQL generation
+  - Migration utilities from Pinecone
+  - Example: `examples/supabase_example.py`
+- **Milvus adapter** - Enterprise vector database integration
+  - Full pymilvus wrapper with HNSW/IVF index support
+  - Collection management and statistics
+  - Import/export utilities
+  - Migration from pgvector
+- **Qdrant adapter** - Cloud-native vector search integration
+  - Support for Qdrant Cloud and local deployments
+  - Payload filtering with Qdrant's filter syntax
+  - Migration utilities from SQL stores
+  - URL convenience helpers
+- **ClickHouse backend** - High-performance analytical vector database support
+  - ANN indexes with HNSW algorithm
+  - Native Array(Float32) vector type
+  - L2Distance similarity search
+  - Filtered query support with JSONExtract
+- **Comprehensive benchmark suite** - Performance testing across all backends
+  - `bench/benchmark.py` for automated benchmarking
+  - `bench/visualize.py` for chart generation
+  - Real benchmark results in `bench/SAMPLE_RESULTS.md`
+  - Metrics: insert throughput, query QPS, latency (P95/P99)
+- **Integration documentation** - Complete guide in `docs/INTEGRATIONS.md`
+  - Usage examples for all integrations
+  - Migration guides between vector stores
+  - Installation options and comparison table
+
+### Changed
+- **Package dependencies** - New optional extras for integrations
+  - `[langchain]` - LangChain support
+  - `[llamaindex]` - LlamaIndex support
+  - `[milvus]` - Milvus support
+  - `[qdrant]` - Qdrant support
+  - `[integrations]` - All framework integrations
+  - `[all]` - All backends and integrations
+- **README** - Added integrations section with quick examples
+- **Code quality** - Removed all visual symbols for professional appearance
+
+### Fixed
+- Benchmark output formatting with plain text status indicators
+- Test output messages for better CI/CD compatibility
+
+## [0.5.0] - 2025-01-07
+
+### Added
+- **ClickHouse backend** with ANN indexes support
+- Real benchmark results documentation
+
+### Changed
+- Updated .gitignore to exclude benchmark data files
+
 ## [0.4.0] - 2025-07-30
 
 **STABLE RELEASE** - Production-ready with API backward compatibility guarantees.

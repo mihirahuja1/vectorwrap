@@ -1,4 +1,4 @@
-# vectorwrap 0.5.0
+# vectorwrap 0.6.0
 
 <p align="center">
   <a href="https://pypi.org/project/vectorwrap"><img src="https://img.shields.io/pypi/v/vectorwrap.svg" alt="PyPI"></a>
