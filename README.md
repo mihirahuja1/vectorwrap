@@ -1,6 +1,6 @@
 # vectorwrap 0.6.0
 
-<img src="https://i.postimg.cc/VkwcDgTj/Screenshot-2025-10-08-at-10-33-35-PM.png>
+<img src="https://i.postimg.cc/VkwcDgTj/Screenshot-2025-10-08-at-10-33-35-PM.png">
 
 <p align="center">
   <a href="https://pypi.org/project/vectorwrap"><img src="https://img.shields.io/pypi/v/vectorwrap.svg" alt="PyPI"></a>
