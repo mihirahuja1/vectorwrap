@@ -1,4 +1,4 @@
-# vectorwrap 0.7.1
+# vectorwrap 0.7.2
 
 <p align="center">
   <img src="https://i.postimg.cc/VkwcDgTj/Screenshot-2025-10-08-at-10-33-35-PM.png" width="300" height="300" />
@@ -260,8 +260,9 @@ Note: ClickHouse vector similarity indexes require ClickHouse version 25.8+ with
 
 ## Integrations
 
-vectorwrap integrates with popular AI frameworks and vector databases:
+vectorwrap integrates with popular AI frameworks and platforms:
 
+- **Appwrite**: Add AI/vector capabilities to Appwrite apps (uses MariaDB backend)
 - **LangChain**: Drop-in VectorStore adapter for RAG pipelines
 - **LlamaIndex**: VectorStore wrapper for data frameworks
 - **Supabase**: Managed PostgreSQL + pgvector helper
@@ -274,6 +275,25 @@ pip install "vectorwrap[langchain]"
 pip install "vectorwrap[llamaindex]"
 pip install "vectorwrap[milvus]"
 pip install "vectorwrap[qdrant]"
+```
+
+**Example with Appwrite (No External Vector DB Needed):**
+```python
+from vectorwrap.integrations.appwrite import AppwriteVectorStore
+
+# Add vector search to your Appwrite app
+vector_store = AppwriteVectorStore.from_connection_string(
+    connection_url="mariadb://appwrite:password@localhost:3306/appwrite",
+    collection_name="embeddings",
+    dimension=1536
+)
+
+# Store and search vectors in Appwrite's MariaDB
+vector_store.add_documents([
+    {"text": "Hello world", "metadata": {"source": "doc1"}}
+], embedding_function=embed_fn)
+
+results = vector_store.search("greeting", embed_fn, top_k=5)
 ```
 
 **Example with LangChain:**

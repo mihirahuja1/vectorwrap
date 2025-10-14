@@ -1,6 +1,104 @@
 # vectorwrap Integrations
 
-vectorwrap provides seamless integration with popular vector databases and AI frameworks.
+vectorwrap provides seamless integration with popular vector databases, AI frameworks, and platforms.
+
+## Appwrite Integration
+
+Add AI and vector search capabilities to Appwrite applications without external vector databases.
+
+### Why Appwrite + vectorwrap?
+
+- **No external services**: Vectors stored in Appwrite's MariaDB backend
+- **Cost reduction**: No Pinecone/Upstash subscription needed
+- **Data locality**: Vectors alongside app data
+- **Native performance**: HNSW indexing on MariaDB 11.8+
+- **Simple API**: Works in Appwrite Functions
+
+### Installation
+
+```bash
+pip install vectorwrap
+# Optional: pip install appwrite  (for SDK integration)
+```
+
+### Basic Usage
+
+```python
+from vectorwrap.integrations.appwrite import AppwriteVectorStore
+
+# Connect to Appwrite's MariaDB backend
+vector_store = AppwriteVectorStore.from_connection_string(
+    connection_url="mariadb://appwrite:password@localhost:3306/appwrite",
+    collection_name="embeddings",
+    dimension=1536
+)
+
+# Add documents with embeddings
+def embed(text):
+    # Use OpenAI, Sentence Transformers, etc.
+    return generate_embedding(text)
+
+vector_store.add_documents([
+    {"text": "Appwrite is a backend platform", "metadata": {"category": "product"}},
+    {"text": "Vector search enables AI apps", "metadata": {"category": "feature"}}
+], embedding_function=embed)
+
+# Search
+results = vector_store.search(
+    query="What is Appwrite?",
+    embedding_function=embed,
+    top_k=5
+)
+
+for result in results:
+    print(f"Distance: {result['distance']:.4f}")
+    print(f"Text: {result['metadata']['_text']}")
+```
+
+### Use in Appwrite Functions
+
+```python
+# Inside your Appwrite Function
+from vectorwrap.integrations.appwrite import create_vector_store_for_appwrite_function
+
+def main(req, res):
+    # Automatically connects to Appwrite's MariaDB
+    vector_store = create_vector_store_for_appwrite_function(
+        collection_name="embeddings",
+        dimension=1536
+    )
+
+    # Add or search vectors
+    if req.method == "POST":
+        data = req.json()
+        vector_store.add_document(
+            doc_id=data['id'],
+            embedding=generate_embedding(data['text']),
+            metadata={"text": data['text']}
+        )
+        return res.json({"status": "success"})
+
+    elif req.method == "GET":
+        query = req.query.get("q")
+        results = vector_store.search(
+            query=query,
+            embedding_function=generate_embedding,
+            top_k=5
+        )
+        return res.json({"results": results})
+```
+
+### Environment Variables
+
+For Appwrite Functions, set these environment variables:
+- `APPWRITE_MARIADB_PASSWORD` (required)
+- `APPWRITE_MARIADB_HOST` (default: mariadb)
+- `APPWRITE_MARIADB_USER` (default: appwrite)
+- `APPWRITE_MARIADB_DATABASE` (default: appwrite)
+
+### Complete Example
+
+See [examples/appwrite_example.py](../examples/appwrite_example.py) for a complete working example.
 
 ## LangChain Integration
 
