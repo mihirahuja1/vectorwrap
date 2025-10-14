@@ -1,4 +1,4 @@
-# vectorwrap 0.7.0
+# vectorwrap 0.7.1
 
 <p align="center">
   <img src="https://i.postimg.cc/VkwcDgTj/Screenshot-2025-10-08-at-10-33-35-PM.png" width="300" height="300" />
@@ -76,7 +76,8 @@ print(results)  # → [(1, 0.023), (2, 0.087)]
 | **PostgreSQL 16+ + pgvector** | `VECTOR(n)` | HNSW | `CREATE EXTENSION vector;` | Production ready |
 | **MySQL 8.2+ HeatWave** | `VECTOR(n)` | Automatic | Built-in | Native vector support |
 | **MySQL ≤8.0 (legacy)** | JSON arrays | None | Built-in | Slower, Python distance |
-| **MariaDB** | JSON arrays | None | Built-in | 10M+ users, Python distance |
+| **MariaDB 11.8+ GA LTS** | `VECTOR(n)` | HNSW | Built-in | Native vectors, 10M+ users |
+| **MariaDB <11.8 (legacy)** | JSON arrays | None | Built-in | Auto-fallback, Python distance |
 | **SQLite + sqlite-vss** | Virtual table | HNSW | `pip install "vectorwrap[sqlite]"` | Great for prototyping |
 | **DuckDB + VSS** | `FLOAT[]` arrays | HNSW | `pip install "vectorwrap[duckdb]"` | Analytics + vectors |
 | **ClickHouse** | `Array(Float32)` | HNSW | `pip install "vectorwrap[clickhouse]"` | High-performance analytics |
@@ -214,6 +215,18 @@ CREATE EXTENSION IF NOT EXISTS vector;
 
 ### MySQL Setup
 MySQL 8.2+ has native `VECTOR` type support. For older versions, vectorwrap automatically falls back to JSON storage with Python-based distance calculations.
+
+### MariaDB Setup
+MariaDB 11.8 GA LTS introduced native `VECTOR` data type with HNSW indexing, similar to pgvector. For older versions, vectorwrap automatically falls back to JSON storage.
+
+```python
+# MariaDB 11.8+ (native VECTOR support)
+db = VectorDB("mariadb://user:pass@localhost:3306/vectordb")
+db.create_collection("embeddings", dim=1536)  # Uses VECTOR(1536) with HNSW
+
+# Older versions automatically use JSON fallback
+# No code changes needed - version detection is automatic
+```
 
 ### DuckDB Setup
 DuckDB includes the VSS extension by default since v0.10.2. The extension provides HNSW indexing for fast vector similarity search:

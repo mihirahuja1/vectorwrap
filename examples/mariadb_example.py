@@ -1,7 +1,8 @@
 """
 Example: Using vectorwrap with MariaDB.
 
-Demonstrates JSON-based vector storage in MariaDB (no native vector support).
+Demonstrates native VECTOR support (MariaDB 11.8 GA LTS+) with automatic
+fallback to JSON storage for older versions.
 """
 
 from vectorwrap import VectorDB
@@ -9,21 +10,23 @@ import random
 
 
 def main():
-    # Connect to MariaDB (uses same mysql-connector as MySQL)
-    # You can use either mysql:// or mariadb:// URL scheme
+    # Connect to MariaDB (11.8+ recommended for native VECTOR support)
     db = VectorDB("mariadb://root:password@localhost:3306/vectordb")
 
-    # Alternative: use mysql:// (works the same way)
-    # db = VectorDB("mysql://root:password@localhost:3306/vectordb")
-
     print("Connected to MariaDB")
+
+    # Check if native vector support is available
+    if hasattr(db, 'native_vector_support') and db.native_vector_support:
+        print("Using MariaDB 11.8+ native VECTOR type with HNSW indexing")
+    else:
+        print("Using JSON-based vector storage (upgrade to MariaDB 11.8+ for better performance)")
 
     # Create collection
     collection_name = "mariadb_documents"
     dim = 384  # Typical sentence transformer dimension
 
     db.create_collection(collection_name, dim=dim)
-    print(f"Created collection: {collection_name}")
+    print(f"\nCreated collection: {collection_name}")
 
     # Generate sample vectors (normally these would be from an embedding model)
     print("\nInserting sample vectors...")
@@ -82,9 +85,17 @@ def main():
     for doc_id, distance in results_l2:
         print(f"  ID: {doc_id}, Distance: {distance:.4f}")
 
-    print("\nNote: MariaDB doesn't have native vector support.")
-    print("Vectors are stored as JSON and distances are computed in Python.")
-    print("For production workloads, consider PostgreSQL + pgvector or MySQL 8.2+")
+    print("\n" + "="*60)
+    print("MariaDB 11.8 GA LTS Features:")
+    print("  - Native VECTOR(n) data type")
+    print("  - HNSW indexing for fast similarity search")
+    print("  - VEC_DISTANCE_EUCLIDEAN and VEC_DISTANCE_COSINE functions")
+    print("  - Production-ready performance (similar to pgvector)")
+    print("\nFor older versions:")
+    print("  - Automatic fallback to JSON storage")
+    print("  - Python-based distance calculations")
+    print("  - Upgrade to 11.8+ recommended for production workloads")
+    print("="*60)
 
 
 if __name__ == "__main__":
