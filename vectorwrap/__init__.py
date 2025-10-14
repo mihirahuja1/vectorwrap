@@ -11,6 +11,7 @@ from .duckdb_backend import DuckDBBackend
 from .clickhouse_backend import ClickHouseBackend
 from .mariadb_backend import MariaDBBackend
 from .redis_backend import RedisBackend
+from .rethinkdb_backend import RethinkDBBackend
 
 
 class VectorBackend(Protocol):
@@ -65,9 +66,11 @@ def VectorDB(url: str) -> VectorBackend:
         return ClickHouseBackend(url)
     if url.startswith("redis"):
         return RedisBackend(url)
+    if url.startswith("rethinkdb"):
+        return RethinkDBBackend(url)
     raise ValueError(
         f"Unsupported URL scheme. "
-        f"URL must start with postgres, mysql, mariadb, sqlite, duckdb, clickhouse, or redis. "
+        f"URL must start with postgres, mysql, mariadb, sqlite, duckdb, clickhouse, redis, or rethinkdb. "
         f"Got: {url}"
     )
 
