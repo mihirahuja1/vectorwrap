@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  mariadb-test:
+    image: mariadb:11.8
+    container_name: vectorwrap-appwrite-test
+    environment:
+      MYSQL_ROOT_PASSWORD: test123
+      MYSQL_DATABASE: appwrite_test
+      MYSQL_USER: appwrite
+      MYSQL_PASSWORD: appwrite123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_test_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mariadb_test_data:

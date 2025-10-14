@@ -305,16 +305,76 @@ class AppwriteVectorStore:
 
         return results
 
+    def initialize_collection(self, collection_name: str, dimension: int) -> None:
+        """
+        Explicitly initialize/create a collection.
+
+        Args:
+            collection_name: Name for the collection
+            dimension: Vector dimension
+
+        Example:
+            ```python
+            vector_store = AppwriteVectorStore.from_connection_string(url)
+            vector_store.initialize_collection("my_vectors", dimension=384)
+            ```
+        """
+        self.collection_name = collection_name
+        self.dimension = dimension
+        self.backend.create_collection(collection_name, dimension)
+
+    def update_document(
+        self,
+        doc_id: int,
+        embedding: list[float],
+        metadata: Optional[dict[str, Any]] = None
+    ) -> None:
+        """
+        Update an existing document (same as add_document, uses upsert).
+
+        Args:
+            doc_id: Document ID to update
+            embedding: New embedding vector
+            metadata: Updated metadata
+
+        Example:
+            ```python
+            vector_store.update_document(
+                doc_id=123,
+                embedding=new_embedding,
+                metadata={"text": "updated", "version": 2}
+            )
+            ```
+        """
+        self.add_document(doc_id, embedding, metadata)
+
     def delete_document(self, doc_id: int) -> None:
         """
         Delete a document by ID.
 
         Args:
             doc_id: Document ID to delete
+
+        Example:
+            ```python
+            vector_store.delete_document(123)
+            ```
         """
-        # Note: Direct delete not implemented in base backend
-        # Would require additional SQL query
-        raise NotImplementedError("Delete operation requires backend extension")
+        # Execute DELETE query directly on MariaDB backend
+        cursor = self.backend.conn.cursor()
+        try:
+            cursor.execute(
+                f"DELETE FROM {self.collection_name} WHERE id = %s",
+                (doc_id,)
+            )
+            self.backend.conn.commit()
+        finally:
+            cursor.close()
+
+    def close(self) -> None:
+        """Close the database connection."""
+        if hasattr(self, 'backend'):
+            self.backend.close()
 
     def get_collection_info(self) -> dict[str, Any]:
         """

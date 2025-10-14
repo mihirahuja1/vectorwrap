@@ -1,4 +1,4 @@
-# vectorwrap 0.7.2
+# vectorwrap 0.7.3
 
 <p align="center">
   <img src="https://i.postimg.cc/VkwcDgTj/Screenshot-2025-10-08-at-10-33-35-PM.png" width="300" height="300" />
@@ -262,7 +262,7 @@ Note: ClickHouse vector similarity indexes require ClickHouse version 25.8+ with
 
 vectorwrap integrates with popular AI frameworks and platforms:
 
-- **Appwrite**: Add AI/vector capabilities to Appwrite apps (uses MariaDB backend)
+- **Appwrite**: Add AI/vector capabilities to Appwrite apps (uses MariaDB backend) - [Testing Guide](tests/README_APPWRITE_TESTING.md)
 - **LangChain**: Drop-in VectorStore adapter for RAG pipelines
 - **LlamaIndex**: VectorStore wrapper for data frameworks
 - **Supabase**: Managed PostgreSQL + pgvector helper
