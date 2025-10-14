@@ -1,4 +1,4 @@
-# vectorwrap 0.6.0
+# vectorwrap 0.7.0
 
 <p align="center">
   <img src="https://i.postimg.cc/VkwcDgTj/Screenshot-2025-10-08-at-10-33-35-PM.png" width="300" height="300" />
@@ -76,9 +76,11 @@ print(results)  # → [(1, 0.023), (2, 0.087)]
 | **PostgreSQL 16+ + pgvector** | `VECTOR(n)` | HNSW | `CREATE EXTENSION vector;` | Production ready |
 | **MySQL 8.2+ HeatWave** | `VECTOR(n)` | Automatic | Built-in | Native vector support |
 | **MySQL ≤8.0 (legacy)** | JSON arrays | None | Built-in | Slower, Python distance |
+| **MariaDB** | JSON arrays | None | Built-in | 10M+ users, Python distance |
 | **SQLite + sqlite-vss** | Virtual table | HNSW | `pip install "vectorwrap[sqlite]"` | Great for prototyping |
-| **DuckDB + VSS**  | `FLOAT[]` arrays | HNSW | `pip install "vectorwrap[duckdb]"` | Analytics + vectors |
-| **ClickHouse**  | `Array(Float32)` | HNSW | `pip install "vectorwrap[clickhouse]"` | High-performance analytics |
+| **DuckDB + VSS** | `FLOAT[]` arrays | HNSW | `pip install "vectorwrap[duckdb]"` | Analytics + vectors |
+| **ClickHouse** | `Array(Float32)` | HNSW | `pip install "vectorwrap[clickhouse]"` | High-performance analytics |
+| **Redis + RediSearch** | Binary vectors | HNSW/FLAT | `pip install "vectorwrap[redis]"` | Ultra-fast in-memory search |
 
 ## Examples
 

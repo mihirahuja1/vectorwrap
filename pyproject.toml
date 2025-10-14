@@ -1,12 +1,12 @@
 [project]
 name = "vectorwrap"
-version = "0.6.0"
-description = "Universal vector search wrapper for Postgres, MySQL, SQLite, DuckDB, ClickHouse (pgvector, HeatWave, sqlite-vss, DuckDB VSS, ClickHouse ANN)"
+version = "0.7.0"
+description = "Universal vector search wrapper for Postgres, MySQL, MariaDB, SQLite, DuckDB, ClickHouse, Redis (pgvector, HeatWave, sqlite-vss, DuckDB VSS, ClickHouse ANN, RediSearch)"
 authors = [{name = "Mihir Ahuja", email = "mihir@example.com"}]
 license = "MIT"
 readme = "README.md"
 requires-python = ">=3.10"
-keywords = ["vector", "database", "embeddings", "similarity", "search", "postgresql", "mysql", "sqlite", "duckdb", "clickhouse"]
+keywords = ["vector", "database", "embeddings", "similarity", "search", "postgresql", "mysql", "mariadb", "sqlite", "duckdb", "clickhouse", "redis"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -33,6 +33,7 @@ Issues = "https://github.com/mihirahuja/vectorwrap/issues"
 sqlite = ["pysqlite3>=0.5.0", "sqlite-vss>=0.1.2"]
 duckdb = ["duckdb>=0.10.2"]
 clickhouse = ["clickhouse-connect>=0.6.0"]
+redis = ["redis[hiredis]>=5.0.0"]
 langchain = ["langchain>=0.1.0"]
 llamaindex = ["llama-index>=0.10.0"]
 milvus = ["pymilvus>=2.3.0"]
@@ -46,9 +47,9 @@ dev = [
     "pre-commit>=3.0"
 ]
 # Convenience extras for different combinations
-all = ["vectorwrap[sqlite,duckdb,clickhouse,langchain,llamaindex,milvus,qdrant]"]
+all = ["vectorwrap[sqlite,duckdb,clickhouse,redis,langchain,llamaindex,milvus,qdrant]"]
 integrations = ["vectorwrap[langchain,llamaindex,milvus,qdrant]"]
-test = ["vectorwrap[dev,sqlite,duckdb,clickhouse]"]
+test = ["vectorwrap[dev,sqlite,duckdb,clickhouse,redis]"]
 
 [build-system]
 requires = ["setuptools>=68", "wheel"]
@@ -130,6 +131,7 @@ module = [
     "duckdb.*",
     "psycopg.*",
     "clickhouse_connect.*",
+    "redis.*",
     "langchain.*",
     "llama_index.*",
     "pymilvus.*",
