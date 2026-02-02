@@ -1,6 +1,6 @@
 [project]
 name = "vectorwrap"
-version = "0.8.0"
+version = "0.9.0"
 description = "Universal vector search wrapper for Postgres, MySQL, MariaDB, SQLite, DuckDB, ClickHouse, Redis, RethinkDB (pgvector, HeatWave, sqlite-vss, DuckDB VSS, ClickHouse ANN, RediSearch, Real-time changefeeds)"
 authors = [{name = "Mihir Ahuja", email = "mihir@example.com"}]
 license = "MIT"
@@ -39,6 +39,7 @@ langchain = ["langchain>=0.1.0"]
 llamaindex = ["llama-index>=0.10.0"]
 milvus = ["pymilvus>=2.3.0"]
 qdrant = ["qdrant-client>=1.7.0"]
+weaviate = ["weaviate-client>=4.0.0"]
 dev = [
     "pytest>=6.0",
     "pytest-cov>=4.0",
@@ -48,8 +49,8 @@ dev = [
     "pre-commit>=3.0"
 ]
 # Convenience extras for different combinations
-all = ["vectorwrap[sqlite,duckdb,clickhouse,redis,rethinkdb,langchain,llamaindex,milvus,qdrant]"]
-integrations = ["vectorwrap[langchain,llamaindex,milvus,qdrant]"]
+all = ["vectorwrap[sqlite,duckdb,clickhouse,redis,rethinkdb,langchain,llamaindex,milvus,qdrant,weaviate]"]
+integrations = ["vectorwrap[langchain,llamaindex,milvus,qdrant,weaviate]"]
 test = ["vectorwrap[dev,sqlite,duckdb,clickhouse,redis,rethinkdb]"]
 
 [build-system]
@@ -138,6 +139,7 @@ module = [
     "langchain.*",
     "llama_index.*",
     "pymilvus.*",
-    "qdrant_client.*"
+    "qdrant_client.*",
+    "weaviate.*"
 ]
 ignore_missing_imports = true

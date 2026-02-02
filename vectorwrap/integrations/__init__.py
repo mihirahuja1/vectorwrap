@@ -7,6 +7,7 @@ This module provides compatibility layers for:
 - Supabase pgvector
 - Milvus
 - Qdrant
+- Weaviate
 """
 
 __all__ = []

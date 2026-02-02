@@ -1,4 +1,4 @@
-# vectorwrap 0.8.0
+# vectorwrap 0.9.0
 
 <p align="center">
   <img src="https://i.postimg.cc/VkwcDgTj/Screenshot-2025-10-08-at-10-33-35-PM.png" width="300" height="300" />
@@ -269,6 +269,7 @@ vectorwrap integrates with popular AI frameworks and platforms:
 - **Supabase**: Managed PostgreSQL + pgvector helper
 - **Milvus**: Enterprise vector database adapter
 - **Qdrant**: Cloud-native vector search integration
+- **Weaviate**: Production-scale vector database integration
 
 ```bash
 # Install with integrations
@@ -276,6 +277,7 @@ pip install "vectorwrap[langchain]"
 pip install "vectorwrap[llamaindex]"
 pip install "vectorwrap[milvus]"
 pip install "vectorwrap[qdrant]"
+pip install "vectorwrap[weaviate]"
 ```
 
 **Example with Appwrite (No External Vector DB Needed):**
@@ -313,6 +315,22 @@ vectorstore.add_texts(["Hello world", "LangChain + vectorwrap"])
 results = vectorstore.similarity_search("greeting", k=5)
 ```
 
+**Example with Weaviate:**
+```python
+from vectorwrap.integrations.weaviate import WeaviateBackend
+
+# Connect to Weaviate (local or cloud)
+db = WeaviateBackend(url="http://localhost:8080")
+# Or cloud: WeaviateBackend(url="https://xxx.weaviate.network", api_key="your-key")
+
+# Create collection and insert vectors
+db.create_collection("documents", dim=1536)
+db.upsert("documents", 1, embedding_vector, {"source": "doc1"})
+
+# Query with metadata filters
+results = db.query("documents", query_vector, top_k=10, filter={"source": "doc1"})
+```
+
 See [docs/INTEGRATIONS.md](docs/INTEGRATIONS.md) for complete integration guide.
 
 ## Benchmarks
@@ -336,9 +354,7 @@ See [bench/README.md](bench/README.md) for detailed benchmarking guide.
 - **Documentation**: Complete API docs and migration guides
 
 ### Future Features
-- **Redis** with RediSearch
 - **Elasticsearch** with dense vector fields
-- **Qdrant** and **Weaviate** support
 - **Batch operations** for bulk inserts
 - **Index configuration** options
 - **Distance metrics**: Cosine, dot product, custom functions
